@@ -1,0 +1,8 @@
+{
+  "name": "skills",
+  "description": "Personal Claude skills, packaged as one Claude Code plugin.",
+  "version": "0.1.0",
+  "author": {
+    "name": "matheus-ft"
+  }
+}
