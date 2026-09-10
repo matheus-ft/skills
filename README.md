@@ -15,6 +15,20 @@ There is no `claude skill` CLI verb and no sync between them. Account skills do 
 appear in Claude Code; local skills do not appear in chat. The bridge is a manual zip
 upload, which is what `package.sh` exists to make cheap and `drift.sh` exists to police.
 
+## The skills, and who wrote them
+
+Some of the skills here may have been taken from elsewhere, and such are credited as below
+
+| Skill      | Taken from                                                                                       | Licence |
+| ---------- | ------------------------------------------------------------------------------------------------ | ------- |
+| `grill-me` | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me) | MIT     |
+| `grilling` | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) | MIT     |
+| `handoff`  | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)  | MIT     |
+| `unslop`   | [backnotprop/pstack](https://github.com/backnotprop/pstack/tree/main/skills/unslop)              | MIT     |
+
+They are generally taken verbatim, but nothing tracks upstream automatically, so I may edit them from time to time to
+suit my specific needs.
+
 ## Layout
 
 ```
@@ -39,6 +53,8 @@ it, because a mismatch is the usual silent upload rejection.
 
 `claude plugin validate .` checks the manifest after touching `plugin.json`.
 
+If the skill came from someone else, add it to the credits table above.
+
 ## Consumers
 
 ### Claude Code via symlink
@@ -61,7 +77,7 @@ claude -p "Output only the names of skills available to you via the Skill tool, 
 ```
 
 Skills with `disable-model-invocation: true` will **not** appear in that list — they are
-slash-command only, so their absence is correct rather than a broken link.
+slash-command only (e.g. `grill-me` being absent is correct, not a broken link).
 
 ### Claude Code, other machines — plugin
 
@@ -86,7 +102,7 @@ For `claude plugin marketplace add <user>/skills`, the repo additionally needs
 
 ```sh
 ./package.sh                    # all skills
-./package.sh <name> <name>      # named ones
+./package.sh grilling unslop    # named ones
 ```
 
 Then drag `dist/*.zip` into claude.ai → Settings → Capabilities → Skills. There is no
