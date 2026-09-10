@@ -35,7 +35,10 @@ suit my specific needs.
 .claude-plugin/plugin.json   makes the repo a single Claude Code plugin
 skills/<name>/SKILL.md       the skills themselves
 package.sh                   zip skills into dist/ for claude.ai upload
+validate.sh                  the checks that must hold before a skill ships
 drift.sh                     repo vs. Claude Code vs. what is live on the account
+.githooks/pre-push           runs both before letting a push through
+.github/workflows/skills.yml the same checks in CI, as a backstop
 dist/                        build output, gitignored
 ```
 
@@ -119,6 +122,29 @@ read-only sync cache under `~/Library/Application Support/Claude/` — the only 
 evidence of what is actually live on the account, since nothing exposes that over an
 API. It is empty until Desktop has run at least once. `drift.sh` never writes there;
 editing that cache directly is pointless because sync overwrites it.
+
+## Automation
+
+The upload itself cannot be automated, so everything around it is.
+
+`validate.sh` is the gate. It rejects a folder whose name disagrees with the `name:` in
+its `SKILL.md`, a skill with no `description:`, and a plugin manifest that is not usable.
+All three fail silently in real use — a name mismatch is refused by the uploader without
+saying why, and a skill with no description loads and then never triggers.
+
+Enable the hook once per clone:
+
+```sh
+git config core.hooksPath .githooks
+```
+
+`pre-push` then runs `validate.sh` and rebuilds `dist/` on every push, so the zips on
+disk always match the commit. `--no-verify` skips it when you need to.
+
+CI runs the same `validate.sh` on every push and pull request, and nothing else. It is a
+backstop for the times the hook does not run: a fresh clone before `core.hooksPath` is
+set, or a push with `--no-verify`. Building the zips stays local, since the upload they
+feed is a browser step on this machine anyway.
 
 ## Portability
 

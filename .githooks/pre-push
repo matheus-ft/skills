@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Enable once per clone with:  git config core.hooksPath .githooks
+#
+# Refuses the push if a skill would not survive an upload, then rebuilds dist/
+# so the zips on disk match what is being pushed. CI does the same checks, but
+# finding out here costs seconds instead of a round trip.
+set -uo pipefail
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if ! "$root/validate.sh"; then
+  echo >&2
+  echo "pre-push: validation failed, nothing pushed." >&2
+  echo "pre-push: fix the above, or pass --no-verify to push anyway." >&2
+  exit 1
+fi
+
+if ! "$root/package.sh"; then
+  echo >&2
+  echo "pre-push: packaging failed, nothing pushed." >&2
+  exit 1
+fi
