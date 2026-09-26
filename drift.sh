@@ -44,6 +44,7 @@ fi
 echo "   cache: $cache"
 for d in "$src"/*/; do
   name=$(basename "$d")
+  [ "$name" = synced ] && continue
   if [ ! -d "$cache/$name" ]; then
     echo "   NOT UPLOADED: $name"
   elif diff -rq "$d" "$cache/$name" >/dev/null 2>&1; then

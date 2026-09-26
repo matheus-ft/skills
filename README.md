@@ -24,7 +24,7 @@ Some of the skills here may have been taken from elsewhere, and such are credite
 | `grill-me` | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me) | MIT     |
 | `grilling` | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) | MIT     |
 | `handoff`  | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)  | MIT     |
-| `unslop`   | [backnotprop/pstack](https://github.com/backnotprop/pstack/tree/main/skills/unslop)              | MIT     |
+| `unslop`   | [backnotprop/pstack](https://github.com/backnotprop/pstack/tree/main/skills/unslop) (disabled)   | MIT     |
 
 They are generally taken verbatim, but nothing tracks upstream automatically, so I may edit them from time to time to
 suit my specific needs.
@@ -39,12 +39,21 @@ validate.sh                  the checks that must hold before a skill ships
 drift.sh                     repo vs. Claude Code vs. what is live on the account
 .githooks/pre-push           runs both before letting a push through
 .github/workflows/skills.yml the same checks in CI, as a backstop
+disabled/<name>/SKILL.md     parked skills: kept, but never loaded or packaged
 dist/                        build output, gitignored
 ```
 
 `skills/` is a fixed directory name — Claude Code's plugin loader looks for exactly
 that. Each folder name must match the `name:` in its `SKILL.md`; `package.sh` enforces
 it, because a mismatch is the usual silent upload rejection.
+
+To switch a skill off without losing it, move its folder to `disabled/`; move it back to
+switch it on. That only covers Claude Code. A copy uploaded to the account stays live until
+it is toggled off at claude.ai.
+
+`skills/synced/` is not ours. Claude Code copies the account skills into
+`~/.claude/skills/synced/`, and the symlink routes that copy into this repo. It is
+gitignored, and all three scripts skip it.
 
 ## Adding or editing a skill
 
@@ -105,7 +114,7 @@ For `claude plugin marketplace add <user>/skills`, the repo additionally needs
 
 ```sh
 ./package.sh                    # all skills
-./package.sh grilling unslop    # named ones
+./package.sh grilling handoff   # named ones
 ```
 
 Then drag `dist/*.zip` into claude.ai → Settings → Capabilities → Skills. There is no

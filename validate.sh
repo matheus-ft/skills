@@ -35,6 +35,8 @@ echo "== skills"
 found=0
 for d in "$src"/*/; do
   [ -d "$d" ] || continue
+  # skills/synced/ is Claude Code's copy of the account skills, not ours.
+  [ "$(basename "$d")" = synced ] && continue
   found=$((found + 1))
   name=$(basename "$d")
   skill="$d/SKILL.md"

@@ -12,7 +12,11 @@ mkdir -p "$out"
 names=("$@")
 if [ ${#names[@]} -eq 0 ]; then
   names=()
-  for d in "$src"/*/; do names+=("$(basename "$d")"); done
+  for d in "$src"/*/; do
+    # skills/synced/ is Claude Code's copy of the account skills, not ours.
+    [ "$(basename "$d")" = synced ] && continue
+    names+=("$(basename "$d")")
+  done
 fi
 
 for name in "${names[@]}"; do
