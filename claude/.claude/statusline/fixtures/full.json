@@ -1,0 +1,48 @@
+{
+  "cwd": "/Users/mturcheti/Projects/skills/.claude/worktrees/statusline",
+  "session_id": "abc123",
+  "session_name": "statusline-work",
+  "transcript_path": "/tmp/t.jsonl",
+  "model": { "id": "claude-opus-5", "display_name": "Opus" },
+  "workspace": {
+    "current_dir": "/Users/mturcheti/Projects/skills/.claude/worktrees/statusline",
+    "project_dir": "/Users/mturcheti/Projects/skills",
+    "added_dirs": [],
+    "repo": { "host": "github.com", "owner": "matheus-ft", "name": "skills" }
+  },
+  "version": "2.1.266",
+  "output_style": { "name": "default" },
+  "cost": {
+    "total_cost_usd": 1.2345,
+    "total_duration_ms": 4500000,
+    "total_api_duration_ms": 2300,
+    "total_lines_added": 156,
+    "total_lines_removed": 23
+  },
+  "context_window": {
+    "total_input_tokens": 155000,
+    "total_output_tokens": 12000,
+    "context_window_size": 200000,
+    "used_percentage": 83,
+    "remaining_percentage": 17,
+    "current_usage": { "input_tokens": 8500, "output_tokens": 1200 }
+  },
+  "exceeds_200k_tokens": false,
+  "prompt_cache": { "warm": true, "hit_ratio": 0.91 },
+  "fast_mode": false,
+  "effort": { "level": "high" },
+  "thinking": { "enabled": true },
+  "rate_limits": {
+    "five_hour": { "used_percentage": 23.5, "resets_at": 9999999999 },
+    "seven_day": { "used_percentage": 91.2, "resets_at": 9999999999 },
+    "spend_limit": { "used_percentage": 62.8, "resets_at": 9999999999 }
+  },
+  "vim": { "mode": "NORMAL" },
+  "worktree": {
+    "name": "statusline",
+    "path": "/Users/mturcheti/Projects/skills/.claude/worktrees/statusline",
+    "branch": "worktree-statusline",
+    "original_cwd": "/Users/mturcheti/Projects/skills",
+    "original_branch": "main"
+  }
+}

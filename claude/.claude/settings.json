@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "model": "opus",
+  "worktree": {
+    "baseRef": "fresh"
+  },
+  "enableWorkflows": true,
+  "workflowKeywordTriggerEnabled": false,
+  "feedbackDrafts": "notify",
+  "maxEffortLevel": "xhigh",
+  "fallbackModel": ["sonnet"],
+  "promptSuggestionEnabled": false,
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku"
+  },
+  "tui": "fullscreen",
+  "theme": "auto",
+  "editorMode": "vim",
+  "verbose": false,
+  "autoCompactEnabled": true,
+  "switchModelsOnFlag": false,
+  "terminalProgressBarEnabled": true,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "remoteControlAtStartup": true,
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline/statusline.sh",
+    "refreshInterval": 10
+  }
+}

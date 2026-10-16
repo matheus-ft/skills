@@ -1,0 +1,37 @@
+{
+  "cwd": "/Users/mturcheti/Projects/skills",
+  "session_id": "abc123",
+  "model": { "id": "claude-haiku-4-5-20251001", "display_name": "Haiku" },
+  "workspace": {
+    "current_dir": "/Users/mturcheti/Projects/skills",
+    "project_dir": "/Users/mturcheti/Projects/skills",
+    "added_dirs": []
+  },
+  "version": "2.1.266",
+  "output_style": { "name": "explanatory" },
+  "cost": {
+    "total_cost_usd": 0.004,
+    "total_duration_ms": 90000,
+    "total_lines_added": 0,
+    "total_lines_removed": 0
+  },
+  "context_window": {
+    "total_input_tokens": 940000,
+    "total_output_tokens": 20000,
+    "context_window_size": 1000000,
+    "used_percentage": 96,
+    "remaining_percentage": 4,
+    "current_usage": { "input_tokens": 500, "output_tokens": 100 }
+  },
+  "exceeds_200k_tokens": true,
+  "prompt_cache": { "warm": false, "hit_ratio": 0.2 },
+  "fast_mode": true,
+  "thinking": { "enabled": false },
+  "rate_limits": {
+    "five_hour": { "used_percentage": 8, "resets_at": 1757450000 },
+    "seven_day": { "used_percentage": 75.9, "resets_at": 1757800000 }
+  },
+  "vim": { "mode": "INSERT" },
+  "pr": { "number": 42, "url": "https://x", "review_state": "changes_requested" },
+  "agent": { "name": "security-reviewer" }
+}

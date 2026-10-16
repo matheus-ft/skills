@@ -1,0 +1,101 @@
+{
+  "session_id": "00000000-0000-0000-0000-000000000000",
+  "transcript_path": "/path/to/transcript.jsonl",
+  "cwd": "/Users/mturcheti/Projects/skills/.claude/worktrees/statusline",
+  "prompt_id": "00000000-0000-0000-0000-000000000000",
+  "agent_type": "claude",
+  "effort": {
+    "level": "high"
+  },
+  "session_name": "customize statusline claude code",
+  "model": {
+    "id": "claude-opus-5",
+    "display_name": "Opus 5"
+  },
+  "workspace": {
+    "current_dir": "/Users/mturcheti/Projects/skills/.claude/worktrees/statusline",
+    "project_dir": "/Users/mturcheti/Projects/skills/.claude/worktrees/statusline",
+    "added_dirs": [],
+    "git_worktree": "statusline",
+    "repo": {
+      "host": "github.com",
+      "owner": "matheus-ft",
+      "name": "skills"
+    }
+  },
+  "version": "2.1.265",
+  "output_style": {
+    "name": "default"
+  },
+  "cost": {
+    "total_cost_usd": 16.2180445,
+    "total_duration_ms": 90689626,
+    "total_api_duration_ms": 1398928,
+    "total_lines_added": 1113,
+    "total_lines_removed": 194
+  },
+  "context_window": {
+    "total_input_tokens": 209275,
+    "total_output_tokens": 128,
+    "context_window_size": 1000000,
+    "current_usage": {
+      "input_tokens": 2,
+      "output_tokens": 128,
+      "cache_creation_input_tokens": 647,
+      "cache_read_input_tokens": 208626
+    },
+    "used_percentage": 21,
+    "remaining_percentage": 79
+  },
+  "exceeds_200k_tokens": true,
+  "prompt_cache": {
+    "warm": true,
+    "caching_observed": true,
+    "ttl": "1h",
+    "expires_at": 1789009542,
+    "requests": 142,
+    "misses": 2,
+    "expected_rebuilds": 0,
+    "hit_ratio": 0.9800254882509413,
+    "cache_write_tokens": 383231,
+    "miss_recache_tokens": 179587,
+    "last_miss_at": 1789002620,
+    "last_miss_cause": {
+      "causes": [
+        "ttl_expired_1h"
+      ]
+    },
+    "miss_causes": {
+      "auto_mode_changed": 1,
+      "ttl_expired_1h": 1
+    },
+    "recache_tokens_if_cold": 209275
+  },
+  "fast_mode": false,
+  "thinking": {
+    "enabled": true
+  },
+  "rate_limits": {
+    "five_hour": {
+      "used_percentage": 65,
+      "resets_at": 1789006800
+    },
+    "seven_day": {
+      "used_percentage": 19,
+      "resets_at": 1789358400
+    }
+  },
+  "vim": {
+    "mode": "INSERT"
+  },
+  "agent": {
+    "name": "claude"
+  },
+  "worktree": {
+    "name": "statusline",
+    "path": "/Users/mturcheti/Projects/skills/.claude/worktrees/statusline",
+    "branch": "worktree-statusline",
+    "original_cwd": "/Users/mturcheti/Projects/skills",
+    "original_branch": "HEAD"
+  }
+}
