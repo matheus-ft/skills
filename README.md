@@ -19,15 +19,17 @@ upload, which is what `package.sh` exists to make cheap and `drift.sh` exists to
 
 Some of the skills here may have been taken from elsewhere, and such are credited as below
 
-| Skill      | Taken from                                                                                       | Licence |
-| ---------- | ------------------------------------------------------------------------------------------------ | ------- |
-| `grill-me` | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me) | MIT     |
-| `grilling` | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) | MIT     |
-| `handoff`  | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)  | MIT     |
-| `unslop`   | [backnotprop/pstack](https://github.com/backnotprop/pstack/tree/main/skills/unslop) (disabled)   | MIT     |
+| Skill             | Taken from                                                                                       | Licence    |
+| ----------------- | ------------------------------------------------------------------------------------------------ | ---------- |
+| `frontend-design` | [anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/frontend-design)       | Apache 2.0 |
+| `grill-me`        | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me) | MIT        |
+| `grilling`        | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) | MIT        |
+| `handoff`         | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)  | MIT        |
+| `unslop`          | [backnotprop/pstack](https://github.com/backnotprop/pstack/tree/main/skills/unslop) (disabled)   | MIT        |
 
-They are generally taken verbatim, but nothing tracks upstream automatically, so I may edit them from time to time to
-suit my specific needs.
+Each carries its upstream licence file in its folder, so the notice ships inside the zip
+too. They are taken verbatim and kept current, as described in
+[Tracking upstream](#tracking-upstream).
 
 ## Layout
 
@@ -37,8 +39,10 @@ skills/<name>/SKILL.md       the skills themselves
 package.sh                   zip skills into dist/ for claude.ai upload
 validate.sh                  the checks that must hold before a skill ships
 drift.sh                     repo vs. Claude Code vs. what is live on the account
+upstream.sh, upstream.tsv    copied skills vs. their upstream repos, and the pins
 .githooks/pre-push           runs both before letting a push through
 .github/workflows/skills.yml the same checks in CI, as a backstop
+.github/workflows/upstream.yml  upstream.sh weekly, proposing updates as a PR
 disabled/<name>/SKILL.md     parked skills: kept, but never loaded or packaged
 dist/                        build output, gitignored
 ```
@@ -65,7 +69,32 @@ gitignored, and all three scripts skip it.
 
 `claude plugin validate .` checks the manifest after touching `plugin.json`.
 
-If the skill came from someone else, add it to the credits table above.
+If the skill came from someone else, add it to the credits table above, add a line to
+`upstream.tsv` with `-` as the commit, and run `./upstream.sh pull <name>`.
+
+Only copy what its licence allows to be redistributed, since this repo is public.
+Anthropic's document skills (`docx`, `pdf`, `pptx`, `xlsx`) are all rights reserved;
+others such as `learn` and `frontend-design` are Apache 2.0. If a copied skill also goes
+up to claude.ai, upload this copy and remove the one installed from Anthropic.
+
+## Tracking upstream
+
+```sh
+./upstream.sh                  # report; exit 1 if any copied skill is behind
+./upstream.sh pull grilling    # take upstream's latest for one (or all, with no name)
+```
+
+`upstream.tsv` pins the upstream commit each copied skill matches. The report lists, per
+skill, the files upstream changed since that pin, and any local edits, which the next
+pull overwrites; `git diff` shows what a pull brought in. A pull mirrors the whole
+upstream folder, extras such as mattpocock's `agents/openai.yaml` (for OpenAI's agents)
+included. A folder with no licence of its own also gets the repo's, so every copy
+carries its notice.
+
+`.github/workflows/upstream.yml` runs the report every Monday. While anything is behind
+it keeps one PR open from the `upstream-updates` branch, rebuilt each week, and closes
+it once all are current. The repo needs **Allow GitHub Actions to create and approve
+pull requests** turned on under Settings → Actions → General.
 
 ## Consumers
 
@@ -150,7 +179,7 @@ git config core.hooksPath .githooks
 `pre-push` then runs `validate.sh` and rebuilds `dist/` on every push, so the zips on
 disk always match the commit. `--no-verify` skips it when you need to.
 
-CI runs the same `validate.sh` on every push and pull request, and nothing else. It is a
+CI (`skills.yml`) runs the same `validate.sh` on every push and pull request. It is a
 backstop for the times the hook does not run: a fresh clone before `core.hooksPath` is
 set, or a push with `--no-verify`. Building the zips stays local, since the upload they
 feed is a browser step on this machine anyway.

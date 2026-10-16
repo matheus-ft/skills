@@ -1,0 +1,8 @@
+# Skills copied from other repos: where each came from, and the upstream commit it matches.
+# Maintained by ./upstream.sh pull; "-" means not pinned yet.
+# dir	repo	path	commit
+skills/frontend-design	anthropics/skills	skills/frontend-design	41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f
+skills/grill-me	mattpocock/skills	skills/productivity/grill-me	fcf0071560d32913c9d4f820e0d7ca467c881619
+skills/grilling	mattpocock/skills	skills/productivity/grilling	95249b0b49782349740fd9b8c6ce32b4e59e497a
+skills/handoff	mattpocock/skills	skills/productivity/handoff	0f5e033ebc47b142f5ffa56a582ede6d9d9bada3
+disabled/unslop	backnotprop/pstack	skills/unslop	f3afb7057ff87b9cb1eff0ada0c6b5c7d1ecc5fa

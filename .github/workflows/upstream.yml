@@ -1,0 +1,55 @@
+name: upstream
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # Mondays, 09:00 UTC
+  workflow_dispatch:
+
+# Opening the PR also needs "Allow GitHub Actions to create and approve pull requests"
+# in the repo's Actions settings.
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  BRANCH: upstream-updates
+  TITLE: Pull copied skills up to date with upstream
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare copied skills with upstream
+        id: check
+        run: |
+          status=0
+          ./upstream.sh > "$RUNNER_TEMP/report.txt" 2>&1 || status=$?
+          cat "$RUNNER_TEMP/report.txt"
+          { echo '```'; cat "$RUNNER_TEMP/report.txt"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+      - name: Fail on an API error
+        if: steps.check.outputs.status == '2'
+        run: exit 1
+      # One PR at a time, on a branch rebuilt from master each week while anything is
+      # behind. A PR opened with GITHUB_TOKEN does not trigger skills.yml, so validate here.
+      - name: Propose the update
+        if: steps.check.outputs.status == '1'
+        run: |
+          ./upstream.sh pull
+          ./validate.sh
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -C "$BRANCH"
+          git add -A
+          git commit -m "$TITLE" -m "$(cat "$RUNNER_TEMP/report.txt")"
+          git push --force origin "$BRANCH"
+          body=$(printf '`./upstream.sh` reported:\n\n```\n%s\n```\n\nAny local edits listed above are overwritten by this update.' "$(cat "$RUNNER_TEMP/report.txt")")
+          n=$(gh pr list --head "$BRANCH" --state open --json number -q '.[0].number')
+          if [ -n "$n" ]; then gh pr edit "$n" --body "$body"; else gh pr create --head "$BRANCH" --title "$TITLE" --body "$body"; fi
+      - name: Close a stale proposal
+        if: steps.check.outputs.status == '0'
+        run: |
+          n=$(gh pr list --head "$BRANCH" --state open --json number -q '.[0].number')
+          if [ -n "$n" ]; then gh pr close "$n" --delete-branch --comment "Up to date again."; fi
