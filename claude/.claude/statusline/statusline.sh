@@ -238,6 +238,38 @@ l2_left=()
 # A cold prompt cache means the next turn re-reads the whole context.
 [[ $cache_warm == false ]] && l2_left+=("${YEL}cache cold${R}")
 
+# Config repos (sync/repos) with anything pending, in every session, so local
+# edits and waiting PRs stay in view without anyone having to mention them.
+# Counts are read live from git; open PRs come from the cache sync.sh keeps,
+# since asking GitHub on every refresh would be far too slow.
+sync_dir="$HOME/.claude/sync"
+if [[ -r $sync_dir/repos ]]; then
+  prs_cache="${XDG_CACHE_HOME:-$HOME/.cache}/claude-sync/prs"
+  while IFS= read -r r; do
+    [[ -z $r || $r == \#* ]] && continue
+    r=${r/#\~/$HOME}
+    [[ -d $r/.git ]] || continue
+    r=$(cd "$r" && pwd -P)
+    n=$(git --no-optional-locks -C "$r" status --porcelain 2>/dev/null | wc -l)
+    n=${n// /}
+    counts=$(git --no-optional-locks -C "$r" rev-list --left-right --count '@{u}...HEAD' 2>/dev/null) || counts='0 0'
+    read -r behind ahead <<<"$counts"
+    prs=$(grep -F "$r"$'\t' "$prs_cache" 2>/dev/null | cut -f2)
+    seg=''
+    (( n > 0 ))      && seg+=" ${YEL}${n}✎${R}"
+    (( ahead > 0 ))  && seg+=" ${YEL}${ahead}↑${R}"
+    (( behind > 0 )) && seg+=" ${CYA}${behind}↓${R}"
+    [[ -n $prs ]]    && seg+=" ${MAG}${prs}${R}"
+    if [[ -n $seg ]]; then
+      name=${r##*/}
+      l2_left+=("${D}${name#.}${R}${seg}")
+    fi
+  done <"$sync_dir/repos"
+fi
+if [[ -e $HOME/.claude/settings.json && ! -L $HOME/.claude/settings.json ]]; then
+  l2_left+=("${RED}settings.json unlinked${R}")
+fi
+
 # Configuring any status line makes Claude Code drop its footer keyboard hints,
 # and there is no setting to keep them. Put the discoverability one back — but
 # on Claude Code's own terms: it only ever showed "? for shortcuts" when the

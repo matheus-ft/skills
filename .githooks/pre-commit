@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Enable once per clone with:  git config core.hooksPath .githooks
+#
+# Refuses a commit that looks like it carries a credential. This repo is public,
+# and a pushed secret has to be rotated, not just deleted. A false positive can be
+# marked with a "gitleaks:allow" comment on its line, or skipped with --no-verify.
+if ! command -v gitleaks >/dev/null; then
+  echo "pre-commit: gitleaks not installed (brew install gitleaks), commit not scanned" >&2
+  exit 0
+fi
+exec gitleaks git --pre-commit --staged --redact --no-banner --log-level warn --verbose

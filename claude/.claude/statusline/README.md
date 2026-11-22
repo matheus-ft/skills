@@ -27,7 +27,8 @@ window you are in, since it is 200k or 1M depending on the model. No percentage:
 three renderings of one number was one too many.
 
 **Line two, left.** What is running: `@agent` when the session was launched
-under one, and a warning when the prompt cache has gone cold. When there is
+under one, a warning when the prompt cache has gone cold, and each config repo
+with something pending (see "Staying in step" in the top-level README). When there is
 nothing to report it falls back to `? for shortcuts` — see below.
 
 **Line two, right.** Rate limits — for each window, the share consumed and a `⟳`

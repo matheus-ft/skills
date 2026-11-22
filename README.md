@@ -40,10 +40,12 @@ too. They are taken verbatim and kept current, as described in
 skills/<name>/SKILL.md       the skills themselves
 claude/.claude/              stow package for ~/.claude: settings.json, rules/, statusline/
 claude/.claude/skills        link back to ./skills, so stow wires the skills too
+claude/.claude/sync/         keeps this machine and the config repos in step (below)
 package.sh                   zip skills into dist/ for claude.ai upload
 validate.sh                  the checks that must hold before a skill ships
 drift.sh                     repo vs. Claude Code vs. what is live on the account
 upstream.sh, upstream.tsv    copied skills vs. their upstream repos, and the pins
+.githooks/pre-commit         gitleaks: refuses a commit that carries a credential
 .githooks/pre-push           runs validate.sh and package.sh before letting a push through
 .github/workflows/skills.yml the same checks in CI, as a backstop
 .github/workflows/upstream.yml  upstream.sh weekly, proposing updates as a PR
@@ -95,10 +97,31 @@ upstream folder, extras such as mattpocock's `agents/openai.yaml` (for OpenAI's 
 included. A folder with no licence of its own also gets the repo's, so every copy
 carries its notice.
 
-`.github/workflows/upstream.yml` runs the report every Monday. While anything is behind
+`.github/workflows/upstream.yml` runs the report every Friday. While anything is behind
 it keeps one PR open from the `upstream-updates` branch, rebuilt each week, and closes
-it once all are current. The repo needs **Allow GitHub Actions to create and approve
+it once all are current. It requests the owner's review on that PR: a bot's PR otherwise
+reaches you only through repo watching, which is easy to have muted, while a review
+request is a "participating" notification, so it emails and pushes to GitHub Mobile. The repo needs **Allow GitHub Actions to create and approve
 pull requests** turned on under Settings → Actions → General.
+
+## Staying in step
+
+Changes flow both ways between this machine and GitHub, for this repo and `~/.dotfiles`
+(listed in [`sync/repos`](claude/.claude/sync/repos)):
+
+- **GitHub → machine.** Upstream skill updates arrive as the PR above. Once merged, the
+  `SessionStart` hook ([`sync/sync.sh`](claude/.claude/sync/sync.sh)) fast-forwards each
+  listed repo whose tree is clean and has nothing unpushed, at the start of the next
+  session. Anything else is left alone.
+- **Machine → GitHub.** Local edits are never pushed automatically, since both repos are
+  public and pushing would skip the review. The status line shows each listed repo with
+  anything pending, in every session: `dotfiles 3✎ 1↑ 2↓ #4` is uncommitted files,
+  unpushed commits, commits not pulled, open PRs. Committing is then an ordinary request
+  in a session opened in that repo.
+
+The hook prints nothing except in a session started inside a listed repo, where it hands
+Claude a summary. Elsewhere it runs in the background, so a session about something else
+never hears about it.
 
 ## Claude Code config
 
@@ -202,13 +225,17 @@ Enable the hook once per clone:
 git config core.hooksPath .githooks
 ```
 
-`pre-push` then runs `validate.sh` and rebuilds `dist/` on every push, so the zips on
+`pre-commit` runs [gitleaks](https://github.com/gitleaks/gitleaks) (`brew install
+gitleaks`) on what is staged, and refuses the commit if it looks like a token or key: the
+repo is public, and a pushed secret has to be rotated, not just deleted. `~/.dotfiles`
+carries the same hook. `pre-push` then runs `validate.sh` and rebuilds `dist/` on every push, so the zips on
 disk always match the commit. `--no-verify` skips it when you need to.
 
 CI (`skills.yml`) runs the same `validate.sh` on every push and pull request. It is a
 backstop for the times the hook does not run: a fresh clone before `core.hooksPath` is
 set, or a push with `--no-verify`. Building the zips stays local, since the upload they
-feed is a browser step on this machine anyway.
+feed is a browser step on this machine anyway. Its `secrets` job runs gitleaks over the
+whole history, as the same kind of backstop for `pre-commit`.
 
 ## Portability
 

@@ -1,0 +1,3 @@
+# Repos that hold this machine's config. Read by sync.sh and the status line.
+~/Projects/skills
+~/.dotfiles
