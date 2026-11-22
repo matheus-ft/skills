@@ -24,6 +24,8 @@ frontmatter() {
     n == 1 {
       if (index($0, key ":") == 1) {
         sub("^" key ":[ \t]*", "")
+        # YAML allows the value quoted, as janestreet/agent_skills writes it.
+        if ($0 ~ /^".*"$/ || $0 ~ /^\047.*\047$/) $0 = substr($0, 2, length($0) - 2)
         print
         exit
       }

@@ -25,7 +25,7 @@ for name in "${names[@]}"; do
     continue
   fi
   # Folder name must match the frontmatter `name:` or the upload is rejected.
-  declared=$(awk '/^---$/{n++; next} n==1 && /^name:/{sub(/^name:[ \t]*/,""); print; exit}' "$src/$name/SKILL.md")
+  declared=$(awk '/^---$/{n++; next} n==1 && /^name:/{sub(/^name:[ \t]*/,""); gsub(/^["\047]|["\047]$/,""); print; exit}' "$src/$name/SKILL.md")
   if [ "$declared" != "$name" ]; then
     echo "FAIL: $name/SKILL.md declares name '$declared'" >&2
     exit 1

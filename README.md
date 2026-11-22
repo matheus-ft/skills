@@ -26,6 +26,7 @@ Some of the skills here may have been taken from elsewhere, and such are credite
 | `grill-me`        | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me) | MIT        |
 | `grilling`        | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling) | MIT        |
 | `handoff`         | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff)  | MIT        |
+| `socratic-tutor`  | [janestreet/agent_skills](https://github.com/janestreet/agent_skills/tree/master/socratic-tutor) | MIT        |
 | `unslop`          | [backnotprop/pstack](https://github.com/backnotprop/pstack/tree/main/skills/unslop) (disabled)   | MIT        |
 
 Each carries its upstream licence file in its folder, so the notice ships inside the zip
